@@ -10,7 +10,7 @@ function App() {
     <div id={'screen'} style={{width:width.current,minHeight:height.current}}>
       <Header />
       <Body/>
-    </div>
+    </div> 
   );
 }
 
