@@ -2,4 +2,8 @@ enum BoxMode{
     idle,edit
 }
 
-export {BoxMode}
+enum BoxType{
+    basic,select
+}
+
+export {BoxMode,BoxType}
