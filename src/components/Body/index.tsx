@@ -1,19 +1,19 @@
-
-import Title from './Title';
 import React, { useState } from 'react';
 import FormBox from './FormBox';
+import { BoxType } from '../../types';
 
->>>>>>> parent of 5267a98 (add)
 
 function App() {
 
-    const [boxArray,SetBoxArray] = useState([<FormBox index={0}/>]);
+    const [boxArray,SetBoxArray] = useState<BoxType[]>([BoxType.basic]);
+
 
     return (
         <div style={{backgroundColor:'red'}}>
             {
-                boxArray.map(obj => {
-                    return boxArray;
+                boxArray.map((obj,index) => {
+                    console.log("반복중" + index);
+                    return <FormBox index={index} key={index} type={obj}/>;
                 })
             }
         </div>
