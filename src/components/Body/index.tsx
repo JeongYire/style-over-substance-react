@@ -3,6 +3,8 @@ import Title from './Title';
 import React, { useState } from 'react';
 import FormBox from './FormBox';
 
+>>>>>>> parent of 5267a98 (add)
+
 function App() {
 
     const [boxArray,SetBoxArray] = useState([<FormBox index={0}/>]);
