@@ -6,7 +6,15 @@ export default (params : {}) => {
     return (
         <div>
             <span>답변</span>
-            <input disabled/>
+            <div>
+                <input type='checkbox' />돈가스
+            </div>
+            <div>
+                <input type='checkbox' />치킨
+            </div>
+            <div>
+                <input type='checkbox' />햄버거
+            </div>
         </div>
     );
 };

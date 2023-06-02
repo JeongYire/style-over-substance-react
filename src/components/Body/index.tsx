@@ -1,12 +1,29 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import FormBox from './FormBox';
-import { BoxType } from '../../types';
+import { BoxType, FormTool } from '../../types';
 
 
-function App() {
+function App(props : any,ref: React.Ref<FormTool | undefined>) {
 
     const [boxArray,SetBoxArray] = useState<BoxType[]>([BoxType.basic]);
 
+    useImperativeHandle(ref, () => ({
+        addForm : (type) => {
+            console.log("addForm");
+
+            if(type == BoxType.basic){
+                console.log("일반");
+                SetBoxArray((array) => [...array,BoxType.basic])
+            }
+            if(type == BoxType.select){
+                console.log("노일반");
+                SetBoxArray((array) => [...array,BoxType.select])
+            }
+        },
+        deleteForm : () => {
+            console.log("deleteForm");
+        }
+    }));
 
     return (
         <div style={{backgroundColor:'red'}}>
@@ -21,4 +38,6 @@ function App() {
 }
 
 
-export default App;
+
+
+export default forwardRef(App);

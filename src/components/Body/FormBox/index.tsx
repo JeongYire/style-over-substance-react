@@ -43,7 +43,7 @@ export default (params : { index : number, type : BoxType }) => {
                 : <input ref={contentInput} defaultValue={content.current}/>
             }
             {
-                type == BoxType.basic 
+                params.type == BoxType.basic 
                 ? <BasicForm />
                 : <SelectForm />
             }
