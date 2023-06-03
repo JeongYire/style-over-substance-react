@@ -1,6 +1,6 @@
 import { createRef } from "react";
 import { BoxType, FormTool } from "../../../types";
-import Header from '../styles/Header.module.css';
+import Header from '../../../styles/Header.module.css';
 
 export default (props : { tool : FormTool }) => {
 
@@ -15,6 +15,7 @@ export default (props : { tool : FormTool }) => {
           </select>
           <h1 onClick={() => {
             let type : number = Number(selectRef.current?.value);
+            props.tool.addForm(type);
           }}>{'추가하기'}</h1>
           <h2 style={{marginLeft:5,marginRight:5}}>|</h2>
           <h1 onClick={() => {

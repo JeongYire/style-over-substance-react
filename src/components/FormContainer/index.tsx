@@ -32,7 +32,7 @@ function App() {
             }
         }
       } />
-      <div style={{backgroundColor:'red'}}>
+      <div>
             {
                 boxArray.map((obj,index) => {
                     console.log("반복중" + index);

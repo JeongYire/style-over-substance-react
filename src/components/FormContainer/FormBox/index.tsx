@@ -22,6 +22,9 @@ export default (params : { index : number, type : BoxType }) => {
     return (
         <div style={{border:'1px solid black'}}>
             <div>
+                <span>현재 모드 : {mode == BoxMode.idle ? '일반' : '편집'}</span>
+            </div>
+            <div>
                 {
                     mode == BoxMode.idle 
                     ? <button onClick={() => {
@@ -30,6 +33,11 @@ export default (params : { index : number, type : BoxType }) => {
                     : <button onClick={() => CompleteEdit()}>완료</button>
                 }
             </div>
+            <span>유형</span>
+            <select defaultValue={params.type}>
+                <option value={BoxType.basic}>일반</option>
+                <option value={BoxType.select}>선택</option>
+            </select>
             <h1>제목</h1>
             {
                 mode == BoxMode.idle 
