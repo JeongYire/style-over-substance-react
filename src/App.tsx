@@ -7,7 +7,7 @@ function App() {
   const height = useRef(window.screen.height);
 
   return (
-    <div id={'screen'} style={{width:width.current,minHeight:height.current}}>
+    <div id={'screen'} >
       <FormContainer />
     </div> 
   );

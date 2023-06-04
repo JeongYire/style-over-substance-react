@@ -1,16 +1,18 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { BoxMode, BoxType } from '../../../types';
 import BasicForm from './BasicForm';
 import SelectForm from './SelectForm';
+import { FormToolContext } from '../../../context';
 
-export default (params : { index : number, type : BoxType }) => {
+export default (params : { id : number, type : BoxType, index : number }) => {
 
-    const [mode,SetMode] = useState<BoxMode>(BoxMode.idle);
-    const [type,SetType] = useState<BoxType>(BoxType.basic);
+    const [mode,SetMode] = useState<BoxMode>(BoxMode.edit);
+    
+    const tool = useContext(FormToolContext);
 
-    const title = useRef<string>('제목');
+    const title = useRef<string>('제목을 적어주세요.');
     const titleInput = useRef<any>();
-    const content = useRef<string>('설명');
+    const content = useRef<string>('설명을 적어주세요.');
     const contentInput = useRef<any>();
 
     const CompleteEdit = () => {
@@ -20,11 +22,9 @@ export default (params : { index : number, type : BoxType }) => {
     }
 
     return (
-        <div style={{border:'1px solid black'}}>
+        <div style={{border:'1px solid black',borderLeft:0,borderRight:0,display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
             <div>
-                <span>현재 모드 : {mode == BoxMode.idle ? '일반' : '편집'}</span>
-            </div>
-            <div>
+                <span>현재 모드 : {mode == BoxMode.idle ? '미리보기' : '편집'}</span>
                 {
                     mode == BoxMode.idle 
                     ? <button onClick={() => {
@@ -33,22 +33,29 @@ export default (params : { index : number, type : BoxType }) => {
                     : <button onClick={() => CompleteEdit()}>완료</button>
                 }
             </div>
-            <span>유형</span>
-            <select defaultValue={params.type}>
-                <option value={BoxType.basic}>일반</option>
-                <option value={BoxType.select}>선택</option>
-            </select>
-            <h1>제목</h1>
+            {
+                mode == BoxMode.edit ?
+                <div>
+                    <span>유형</span>
+                    <select defaultValue={params.type} onChange={() => {
+                        console.log('onchange');
+                        tool.changeForm(params.id,params.type == BoxType.select ? BoxType.basic : BoxType.select);
+                    }}>
+                        <option value={BoxType.basic}>일반</option>
+                        <option value={BoxType.select}>선택</option>
+                    </select>
+                </div>
+                 : null
+            }
             {
                 mode == BoxMode.idle 
-                ? <h2>{title.current}</h2>
-                : <input ref={titleInput} defaultValue={title.current} />
+                ? <h2>{params.index}. {title.current}</h2>
+                : <input ref={titleInput} defaultValue={title.current} placeholder='제목을 적어주세요.'/>
             }
-            <h1>설명</h1>
             {
                 mode == BoxMode.idle 
                 ? <h2>{content.current}</h2>
-                : <input ref={contentInput} defaultValue={content.current}/>
+                : <input ref={contentInput} defaultValue={content.current} placeholder='설명을 적어주세요.'/>
             }
             {
                 params.type == BoxType.basic 

@@ -8,8 +8,14 @@ enum BoxType{
 
 type FormTool = {
     addForm : (type : BoxType) => void,
-    deleteForm : () => void
+    deleteForm : () => void,
+    changeForm : (id : number,changeType : BoxType) => void,
+}
+
+type FormBoxInfo = {
+    id : number,
+    type : BoxType,
 }
 
 export {BoxMode,BoxType}
-export type {FormTool};
+export type {FormTool,FormBoxInfo};
