@@ -14,10 +14,13 @@ export default (params : { id : number, type : BoxType, index : number }) => {
     const titleInput = useRef<any>();
     const content = useRef<string>('설명을 적어주세요.');
     const contentInput = useRef<any>();
+    const required = useRef<boolean>(false);
+    const requiredInput = useRef<any>();
 
     const CompleteEdit = () => {
         title.current = (titleInput.current as HTMLInputElement).value;
         content.current = (contentInput.current as HTMLInputElement).value;
+        required.current = (requiredInput.current as HTMLInputElement).checked;
         SetMode(BoxMode.idle);
     }
 
@@ -48,8 +51,21 @@ export default (params : { id : number, type : BoxType, index : number }) => {
                  : null
             }
             {
+                mode == BoxMode.edit ?
+                <div>
+                    <span>필수 문항</span>
+                    <input type='checkbox' ref={requiredInput} defaultChecked={required.current}/>
+                </div>
+                 : null
+            }
+            {
+                params.type == BoxType.basic ?
+                <BasicForm.Option />
+                 : null
+            }
+            {
                 mode == BoxMode.idle 
-                ? <h2>{params.index}. {title.current}</h2>
+                ? required.current == true ? <h2>* {params.index}. {title.current}</h2> : <h2>{params.index}. {title.current}</h2>
                 : <input ref={titleInput} defaultValue={title.current} placeholder='제목을 적어주세요.'/>
             }
             {
@@ -58,8 +74,9 @@ export default (params : { id : number, type : BoxType, index : number }) => {
                 : <input ref={contentInput} defaultValue={content.current} placeholder='설명을 적어주세요.'/>
             }
             {
+                mode == BoxMode.edit ? null :
                 params.type == BoxType.basic 
-                ? <BasicForm />
+                ? <BasicForm.Answer/>
                 : <SelectForm />
             }
         </div>

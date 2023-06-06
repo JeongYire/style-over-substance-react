@@ -8,8 +8,6 @@ export default () => {
     const selectRef = createRef<HTMLSelectElement>();
     const tool = useContext(FormToolContext)
 
-    //주석
-    
     return(
     <div id={Header.mainHeader}>
         <span style={{display:'flex',alignItems:'center'}}>

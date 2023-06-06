@@ -9,7 +9,6 @@ function App() {
 
   const boxIndex = useRef<number>(0);
   const [boxArray,SetBoxArray] = useState<FormBoxInfo[]>([{id : 0, type : BoxType.basic}]);
-  console.log(boxArray);
 
   const formTool = useCallback<() => FormTool>(() => {
     const value : FormTool = {
@@ -29,7 +28,7 @@ function App() {
             SetBoxArray((array) => [...array,newBox])
         }
     },
-    deleteForm : () => {
+    deleteForm : (id) => {
         console.log("deleteForm");
     },
     changeForm : (id,changeType) => {

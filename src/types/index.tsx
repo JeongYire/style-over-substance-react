@@ -6,9 +6,13 @@ enum BoxType{
     basic,select
 }
 
+enum AnswerType{
+    short,long
+}
+
 type FormTool = {
     addForm : (type : BoxType) => void,
-    deleteForm : () => void,
+    deleteForm : (id : number) => void,
     changeForm : (id : number,changeType : BoxType) => void,
 }
 
@@ -17,5 +21,5 @@ type FormBoxInfo = {
     type : BoxType,
 }
 
-export {BoxMode,BoxType}
+export {BoxMode,BoxType,AnswerType}
 export type {FormTool,FormBoxInfo};
