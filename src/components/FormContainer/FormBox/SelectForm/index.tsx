@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { BoxMode } from '../../../../types';
 
-export default (params : {}) => {
-  
+export default () => {
+
     return (
         <div>
             <span>답변</span>
