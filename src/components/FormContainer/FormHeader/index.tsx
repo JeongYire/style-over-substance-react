@@ -1,12 +1,12 @@
 import { createRef, useContext } from "react";
-import { BoxType, FormTool } from "../../../types";
+import { BoxType } from "../../../types";
 import Header from '../../../styles/Header.module.css';
-import { FormToolContext } from "../../../context";
+import { FormManagerToolContext } from "../../../context";
 
 export default () => {
 
     const selectRef = createRef<HTMLSelectElement>();
-    const tool = useContext(FormToolContext)
+    const tool = useContext(FormManagerToolContext)
 
     return(
     <div id={Header.mainHeader}>

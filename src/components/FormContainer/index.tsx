@@ -1,17 +1,17 @@
 import React, { createRef, forwardRef, useCallback, useRef, useState } from 'react';
-import { BoxType, FormBoxInfo, FormTool } from '../../types';
+import { BoxType, FormBoxInfo, FormManagerTool } from '../../types';
 import Header from '../styles/Header.module.css';
 import FormBox from './FormBox';
 import FormHeader from './FormHeader';
-import { FormToolContext } from '../../context';
+import { FormManagerToolContext } from '../../context';
 
 function App() {
 
   const boxIndex = useRef<number>(0);
   const [boxArray,SetBoxArray] = useState<FormBoxInfo[]>([{id : 0, type : BoxType.basic}]);
 
-  const formTool = useCallback<() => FormTool>(() => {
-    const value : FormTool = {
+  const FormManagerTool = useCallback<() => FormManagerTool>(() => {
+    const value : FormManagerTool = {
       addForm : (type) => {
         console.log("addForm");
 
@@ -44,7 +44,7 @@ function App() {
 
   return (
     <div id={'screen'}>
-      <FormToolContext.Provider value={formTool()}>
+      <FormManagerToolContext.Provider value={FormManagerTool()}>
         <FormHeader/>
         <div>
               {
@@ -54,7 +54,7 @@ function App() {
                   })
               }
       </div>
-      </FormToolContext.Provider>
+      </FormManagerToolContext.Provider>
     </div> 
   );
 }

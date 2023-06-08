@@ -1,16 +1,16 @@
-import React, { LegacyRef, Ref, forwardRef, useRef, useState } from 'react';
-import { BoxMode } from '../../../../types';
-
+import React, { LegacyRef, Ref, forwardRef, useReducer, useRef, useState } from 'react';
+import { BoxMode, BoxType } from '../../../../types';
 
 const FormBody = {
-    Answer : forwardRef((props,ref : LegacyRef<HTMLInputElement>)  => (
+    Answer : forwardRef((props,ref : LegacyRef<HTMLInputElement>) => {
+        return (
         <div>
             <span>답변</span>
             <input disabled ref={ref}/>
         </div>
-    )),
+        )
+    }),
     Option : forwardRef((props,ref : LegacyRef<HTMLInputElement>) => {
-
         return (
             <div>
                 <span>답변 유형</span>
@@ -27,14 +27,7 @@ const FormBody = {
     })
 };
 
-const FormChecker = {
-   Tool : {
-     
-   }
-}
 
-const BasicForm = {
-    ...FormBody,...FormBody
-}
 
-export default BasicForm;
+
+export default {...FormBody};

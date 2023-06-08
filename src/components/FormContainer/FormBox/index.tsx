@@ -2,13 +2,13 @@ import React, { useContext, useRef, useState } from 'react';
 import { BoxMode, BoxType } from '../../../types';
 import BasicForm from './BasicForm';
 import SelectForm from './SelectForm';
-import { FormToolContext } from '../../../context';
+import { FormManagerToolContext } from '../../../context';
 
 export default (params : { id : number, type : BoxType, index : number }) => {
 
     const [mode,SetMode] = useState<BoxMode>(BoxMode.edit);
     
-    const tool = useContext(FormToolContext);
+    const tool = useContext(FormManagerToolContext);
 
     const title = useRef<string>('제목을 적어주세요.');
     const titleInput = useRef<any>();
@@ -60,8 +60,10 @@ export default (params : { id : number, type : BoxType, index : number }) => {
             }
             {
                 params.type == BoxType.basic ?
-                <BasicForm.Option />
-                 : null
+                <BasicForm.Option /> : 
+                params.type == BoxType.select ? 
+                <SelectForm.Option /> :
+                null
             }
             {
                 mode == BoxMode.idle 
@@ -77,7 +79,7 @@ export default (params : { id : number, type : BoxType, index : number }) => {
                 mode == BoxMode.edit ? null :
                 params.type == BoxType.basic 
                 ? <BasicForm.Answer/>
-                : <SelectForm />
+                : <SelectForm.Answer/>
             }
         </div>
     );

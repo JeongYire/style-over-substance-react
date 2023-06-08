@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { FormTool } from "../types";
+import { FormManagerTool } from "../types";
 
-const FormToolContext = createContext<FormTool>({
+const FormManagerToolContext = createContext<FormManagerTool>({
     addForm : () => {},
     changeForm : () => {},
     deleteForm : () => {}
 })
 
-export { FormToolContext };
+export { FormManagerToolContext };

@@ -1,3 +1,4 @@
+
 enum BoxMode{
     idle,edit
 }
@@ -10,7 +11,7 @@ enum AnswerType{
     short,long
 }
 
-type FormTool = {
+type FormManagerTool = {
     addForm : (type : BoxType) => void,
     deleteForm : (id : number) => void,
     changeForm : (id : number,changeType : BoxType) => void,
@@ -22,4 +23,4 @@ type FormBoxInfo = {
 }
 
 export {BoxMode,BoxType,AnswerType}
-export type {FormTool,FormBoxInfo};
+export type {FormManagerTool,FormBoxInfo};
