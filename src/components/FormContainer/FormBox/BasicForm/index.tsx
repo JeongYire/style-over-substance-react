@@ -1,26 +1,32 @@
-import React, { LegacyRef, Ref, forwardRef, useReducer, useRef, useState } from 'react';
-import { BoxMode, BoxType } from '../../../../types';
+import React, { LegacyRef, MutableRefObject, Ref, forwardRef, useEffect, useReducer, useRef, useState } from 'react';
+import { BasicOptionAnswerType, BoxMode, BoxType } from '../../../../types';
 
 const FormBody = {
-    Answer : forwardRef((props,ref : LegacyRef<HTMLInputElement>) => {
+    Answer : (props : {formParameter : BasicOptionAnswerType}) => {
+
         return (
         <div>
             <span>답변</span>
-            <input disabled ref={ref}/>
+            {
+                props.formParameter == BasicOptionAnswerType.short ? <input disabled/> : <textarea disabled/>
+            }
         </div>
         )
-    }),
-    Option : forwardRef((props,ref : LegacyRef<HTMLInputElement>) => {
+    },
+    Option : forwardRef((params,ref : LegacyRef<HTMLInputElement>) => {
+
+        const defaultValue = useRef<BasicOptionAnswerType>(BasicOptionAnswerType.default);
+       
         return (
             <div>
                 <span>답변 유형</span>
                 <div>
                     <span>단답형</span>
-                    <input type="radio" name='answerType'/>
+                    <input type="radio" name='answerType' value={BasicOptionAnswerType.short} ref={ref} defaultChecked={defaultValue.current == BasicOptionAnswerType.short}/>
                 </div>
                 <div>
                     <span>장문형</span>
-                    <input type="radio" name='answerType'/>
+                    <input type="radio" name='answerType'  value={BasicOptionAnswerType.long}   defaultChecked={defaultValue.current == BasicOptionAnswerType.long}/>
                 </div>
             </div>
         )

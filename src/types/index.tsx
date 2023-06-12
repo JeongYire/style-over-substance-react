@@ -7,9 +7,11 @@ enum BoxType{
     basic,select
 }
 
-enum AnswerType{
-    short,long
+enum BasicOptionAnswerType{
+    default = 'short',short = 'short',long = 'long',
 }
+
+
 
 type FormManagerTool = {
     addForm : (type : BoxType) => void,
@@ -22,5 +24,5 @@ type FormBoxInfo = {
     type : BoxType,
 }
 
-export {BoxMode,BoxType,AnswerType}
+export {BoxMode,BoxType,BasicOptionAnswerType}
 export type {FormManagerTool,FormBoxInfo};

@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useState } from 'react';
-import { BoxMode, BoxType } from '../../../types';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { BasicOptionAnswerType, BoxMode, BoxType } from '../../../types';
 import BasicForm from './BasicForm';
 import SelectForm from './SelectForm';
 import { FormManagerToolContext } from '../../../context';
@@ -16,6 +16,20 @@ export default (params : { id : number, type : BoxType, index : number }) => {
     const contentInput = useRef<any>();
     const required = useRef<boolean>(false);
     const requiredInput = useRef<any>();
+
+    const formOptionRef = useRef<any>();
+    const [formParameter,SetFormParameter] = useState<BasicOptionAnswerType>(BasicOptionAnswerType.default);
+    
+    useEffect(() => {
+
+        const option = formOptionRef.current as HTMLInputElement
+        option.onchange = () => {
+            const value : BasicOptionAnswerType = option.value as BasicOptionAnswerType;
+            SetFormParameter(value);
+        }
+
+    },[params.type])
+    
 
     //주석3
     const CompleteEdit = () => {
@@ -61,7 +75,7 @@ export default (params : { id : number, type : BoxType, index : number }) => {
             }
             {
                 params.type == BoxType.basic ?
-                <BasicForm.Option /> : 
+                <BasicForm.Option ref={formOptionRef}/> : 
                 params.type == BoxType.select ? 
                 <SelectForm.Option /> :
                 null
@@ -77,9 +91,8 @@ export default (params : { id : number, type : BoxType, index : number }) => {
                 : <input ref={contentInput} defaultValue={content.current} placeholder='설명을 적어주세요.'/>
             }
             {
-                mode == BoxMode.edit ? null :
                 params.type == BoxType.basic 
-                ? <BasicForm.Answer/>
+                ? <BasicForm.Answer formParameter={formParameter as BasicOptionAnswerType}/>
                 : <SelectForm.Answer/>
             }
         </div>
