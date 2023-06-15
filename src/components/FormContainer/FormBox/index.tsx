@@ -31,7 +31,7 @@ export default (params : { id : number, type : BoxType, index : number }) => {
     },[params.type])
     
 
-    //주석4
+    //주석5
     const CompleteEdit = () => {
         title.current = (titleInput.current as HTMLInputElement).value;
         content.current = (contentInput.current as HTMLInputElement).value;
