@@ -7,36 +7,13 @@ import { FormManagerToolContext } from '../../../context';
 export default (params : { id : number, type : BoxType, index : number }) => {
 
     const [mode,SetMode] = useState<BoxMode>(BoxMode.edit);
-    
+
     const tool = useContext(FormManagerToolContext);
 
-    const title = useRef<string>('제목을 적어주세요.');
-    const titleInput = useRef<any>();
-    const content = useRef<string>('설명을 적어주세요.');
-    const contentInput = useRef<any>();
-    const required = useRef<boolean>(false);
-    const requiredInput = useRef<any>();
+    const completeEdit = useRef<() => void>(() => {})
 
-    const formOptionRef = useRef<any>();
-    const [formParameter,SetFormParameter] = useState<BasicOptionAnswerType>(BasicOptionAnswerType.default);
-    
-    useEffect(() => {
-
-        const option = formOptionRef.current as HTMLInputElement
-        option.onchange = () => {
-            const value : BasicOptionAnswerType = option.value as BasicOptionAnswerType;
-            SetFormParameter(value);
-        }
-
-    },[params.type])
-    
-
-    //주석6
-    const CompleteEdit = () => {
-        title.current = (titleInput.current as HTMLInputElement).value;
-        content.current = (contentInput.current as HTMLInputElement).value;
-        required.current = (requiredInput.current as HTMLInputElement).checked;
-        SetMode(BoxMode.idle);
+    const changeMode = () => {
+        mode == BoxMode.edit ? SetMode(BoxMode.idle) : SetMode(BoxMode.edit);
     }
 
     return (
@@ -48,7 +25,7 @@ export default (params : { id : number, type : BoxType, index : number }) => {
                     ? <button onClick={() => {
                         SetMode(BoxMode.edit);
                     }}>편집</button>
-                    : <button onClick={() => CompleteEdit()}>완료</button>
+                    : <button onClick={() => {completeEdit.current(); changeMode();}}>완료</button>
                 }
             </div>
             {
@@ -66,35 +43,10 @@ export default (params : { id : number, type : BoxType, index : number }) => {
                  : null
             }
             {
-                mode == BoxMode.edit ?
-                <div>
-                    <span>필수 문항</span>
-                    <input type='checkbox' ref={requiredInput} defaultChecked={required.current}/>
-                </div>
-                 : null
-            }
-            {
-                params.type == BoxType.basic ?
-                <BasicForm.Option ref={formOptionRef}/> : 
-                params.type == BoxType.select ? 
-                <SelectForm.Option /> :
-                null
-            }
-            {
-                mode == BoxMode.idle 
-                ? required.current == true ? <h2>* {params.index}. {title.current}</h2> : <h2>{params.index}. {title.current}</h2>
-                : <input ref={titleInput} defaultValue={title.current} placeholder='제목을 적어주세요.'/>
-            }
-            {
-                mode == BoxMode.idle 
-                ? <h2>{content.current}</h2>
-                : <input ref={contentInput} defaultValue={content.current} placeholder='설명을 적어주세요.'/>
-            }
-            {
-                params.type == BoxType.basic 
-                ? <BasicForm.Answer formParameter={formParameter as BasicOptionAnswerType}/>
-                : <SelectForm.Answer/>
+                params.type == BoxType.basic ? <BasicForm index={params.index} completeEdit={completeEdit} mode={mode} /> : <SelectForm index={params.index} completeEdit={completeEdit} mode={mode} />
             }
         </div>
-    );
+    )
+
+ 
 };
