@@ -11,7 +11,7 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
     const requiredInput = useRef<any>();
 
     const CompleteEdit = () => {
-        console.log('BASIC FORM COMPLETE EDIT2');
+        console.log('BASIC FORM COMPLETE EDIT3');
         title.current = (titleInput.current as HTMLInputElement).value;
         content.current = (contentInput.current as HTMLInputElement).value;
         required.current = (requiredInput.current as HTMLInputElement).checked;
