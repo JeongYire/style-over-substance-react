@@ -11,6 +11,18 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
     const required = useRef<boolean>(false);
     const requiredInput = useRef<any>();
 
+    const [choiceArray,setChoiceArray] = useState<Array<{ value : string , selected : boolean }>>(
+        [{selected : false, value : '선택지1'},{selected : false, value : '선택지2'}]
+    );
+    
+    const selectChoice = (value : { value : string , selected : boolean } ) => {
+        value.selected = !value.selected;
+
+        setChoiceArray((array)=>{
+            return [...array]
+        })
+    }
+
     const CompleteEdit = () => {
         console.log('SELECT FORM COMPLETE EDIT');
         title.current = (titleInput.current as HTMLInputElement).value;
@@ -33,21 +45,12 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
                 : null
             }
             {
-                /*
                 params.mode == BoxMode.edit ?
                 <div>
-                    <span>답변 유형</span>
-                    <div>
-                        <span>단답형</span>
-                        <input type="radio" name='answerType' value={BasicOptionAnswerType.short}/>
-                    </div>
-                    <div>
-                        <span>장문형</span>
-                        <input type="radio" name='answerType'  value={BasicOptionAnswerType.long}/>
-                    </div>
-                </div> 
+                    <span>복수선택 여부</span>
+                    <input type='checkbox' ref={requiredInput} defaultChecked={required.current}/>
+                </div>
                 : null
-                */
             }
             {
                 params.mode == BoxMode.idle 
@@ -61,16 +64,18 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
             }
             {
                 <div>
-                    <span>답변</span>
-                    <div>
-                        <input type='checkbox' />돈가스
+                    <div style={{height:30,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                        <span>답변</span>
+                        &nbsp;
+                        <span style={{color:'blue'}}>추가</span>
+                        <span>|</span>
+                        <span style={{color:'red'}}>삭제</span>
                     </div>
-                    <div>
-                        <input type='checkbox' />치킨
-                    </div>
-                    <div>
-                        <input type='checkbox' />햄버거
-                    </div>
+                    {
+                        choiceArray.map((obj,index) => {
+                            return <div key={`choice_${index}`} onClick={() => selectChoice(obj)} style={{backgroundColor:obj.selected ? 'red' : 'white'}}><input type='checkbox' /><input defaultValue={obj.value}/></div>
+                        })
+                    }
                 </div>
             }
         </>

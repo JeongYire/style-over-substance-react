@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { BasicOptionAnswerType, BoxMode } from '../../../../types';
 
 export default (params : { mode : BoxMode ,index : number, completeEdit : MutableRefObject<() => void> }) => {
@@ -9,6 +9,13 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
     const contentInput = useRef<any>();
     const required = useRef<boolean>(false);
     const requiredInput = useRef<any>();
+
+    const [answerType,setAnswerType] = useState<BasicOptionAnswerType>(BasicOptionAnswerType.short);
+
+    const radioEvent = (value : string) => {
+        const type = value as BasicOptionAnswerType;
+        setAnswerType(type);
+    }
 
     const CompleteEdit = () => {
         console.log('BASIC FORM COMPLETE EDIT3');
@@ -37,11 +44,11 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
                     <span>답변 유형</span>
                     <div>
                         <span>단답형</span>
-                        <input type="radio" name='answerType' value={BasicOptionAnswerType.short}/>
+                        <input checked={answerType == BasicOptionAnswerType.short} type="radio" name='answerType' value={BasicOptionAnswerType.short} onChange={(obj) => {radioEvent(obj.currentTarget.value)}}/>
                     </div>
                     <div>
                         <span>장문형</span>
-                        <input type="radio" name='answerType'  value={BasicOptionAnswerType.long}/>
+                        <input checked={answerType == BasicOptionAnswerType.long} type="radio" name='answerType'  value={BasicOptionAnswerType.long} onChange={(obj) => {radioEvent(obj.currentTarget.value)}}/>
                     </div>
                 </div> 
                 : null
@@ -60,10 +67,7 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
                 <div>
                     <span>답변</span>
                     {
-                    //  props.formParameter == BasicOptionAnswerType.short ? <input disabled/> : <textarea disabled/>
-                    <div>
-                        <input disabled/>
-                    </div>
+                    answerType == BasicOptionAnswerType.short ? <input disabled/> : <textarea disabled/>
                     }
                 </div>
             }
