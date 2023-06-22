@@ -10,8 +10,20 @@ enum BoxType{
 enum BasicOptionAnswerType{
     default = 'short',short = 'short',long = 'long',
 }
+type ChoiceValueObject = {
+    value : string
+}
 
+type ChoiceObject = { 
+    id : number,
+    valueObject : ChoiceValueObject,
+    selected : boolean ,
+}
 
+type ChoiceObjectContainer = {
+    id : number,
+    instance : ChoiceObject[]
+}
 
 type FormManagerTool = {
     addForm : (type : BoxType) => void,
@@ -25,4 +37,4 @@ type FormBoxInfo = {
 }
 
 export {BoxMode,BoxType,BasicOptionAnswerType}
-export type {FormManagerTool,FormBoxInfo};
+export type {FormManagerTool,FormBoxInfo,ChoiceObject,ChoiceValueObject,ChoiceObjectContainer};

@@ -1,8 +1,10 @@
 import React, { LegacyRef, MutableRefObject, forwardRef, useEffect, useRef, useState } from 'react';
-import { BoxMode } from '../../../../types';
+import { ChoiceObjectContainer, BoxMode, ChoiceObject, ChoiceValueObject } from '../../../../types';
 
 
 export default (params : { mode : BoxMode ,index : number, completeEdit : MutableRefObject<() => void> }) => {
+
+    console.log("렌더링")
 
     const title = useRef<string>('제목을 적어주세요.');
     const titleInput = useRef<any>();
@@ -11,19 +13,62 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
     const required = useRef<boolean>(false);
     const requiredInput = useRef<any>();
 
-    const [choiceArray,setChoiceArray] = useState<Array<{ value : string , selected : boolean }>>(
-        [{selected : false, value : '선택지1'},{selected : false, value : '선택지2'}]
+    const choiceRef = useRef<ChoiceValueObject[]>([{value:'선택지1'},{value:'선택지2'}]);
+
+    const [choiceObjectContainer,setChoiceObjectContainer] = useState<ChoiceObjectContainer>(
+        {
+            id:3,
+            instance : [{id : 1 ,selected : false, valueObject : choiceRef.current[0]},{id : 2,selected : false, valueObject : choiceRef.current[1]}]
+        }
     );
-    
-    const selectChoice = (value : { value : string , selected : boolean } ) => {
+
+    const selectChoice = (value : ChoiceObject ) => {
         value.selected = !value.selected;
 
-        setChoiceArray((array)=>{
-            return [...array]
+        setChoiceObjectContainer((con)=>{
+            return {...con}
         })
     }
 
-    const CompleteEdit = () => {
+    const addChoice = ( ) => {
+        
+        setChoiceObjectContainer((con)=>{
+
+            const id = con.id;
+            const valueObject = {value : `선택지${id}`};
+            choiceRef.current.push(valueObject)
+            con.instance.push({id : id,selected : false , valueObject : valueObject});
+            con.id++;
+            return {...con}
+        })
+    }
+
+    const deleteChoice = () => {
+
+        const deleteArray = choiceObjectContainer.instance.filter(obj => obj.selected);
+
+        if(deleteArray.length < 1){
+            return;
+        }
+
+        if(choiceObjectContainer.instance.length - deleteArray.length < 2){
+            alert('선택지는 최소 두개가 필요합니다!');
+            return;
+        }
+           
+        setChoiceObjectContainer((con)=>{
+            deleteArray.map( deleteObj => {
+                const index = choiceRef.current.findIndex(obj => obj == deleteObj.valueObject);
+                if(index > -1){
+                    choiceRef.current.splice(index,1);
+                }
+            } );
+            con.instance =  con.instance.filter(obj => !obj.selected);
+            return {...con}
+        })
+    }
+
+    const completeEdit = () => {
         console.log('SELECT FORM COMPLETE EDIT');
         title.current = (titleInput.current as HTMLInputElement).value;
         content.current = (contentInput.current as HTMLInputElement).value;
@@ -31,7 +76,7 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
     }
 
     useEffect(() => {
-        params.completeEdit.current = CompleteEdit;
+        params.completeEdit.current = completeEdit;
     },[])
 
     return (
@@ -67,13 +112,20 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
                     <div style={{height:30,display:'flex',alignItems:'center',justifyContent:'center'}}>
                         <span>답변</span>
                         &nbsp;
-                        <span style={{color:'blue'}}>추가</span>
+                        <span style={{color:'blue'}} onClick={() => addChoice()}>추가</span>
                         <span>|</span>
-                        <span style={{color:'red'}}>삭제</span>
+                        <span style={{color:'red'}} onClick={() => deleteChoice()}>선택 삭제</span>
                     </div>
                     {
-                        choiceArray.map((obj,index) => {
-                            return <div key={`choice_${index}`} onClick={() => selectChoice(obj)} style={{backgroundColor:obj.selected ? 'red' : 'white'}}><input type='checkbox' /><input defaultValue={obj.value}/></div>
+                        choiceObjectContainer.instance.map((obj) => {
+                            console.log(obj.id);
+                            return (
+                                <div key={`choice_${obj.id}`} onClick={() => selectChoice(obj)} style={{backgroundColor:obj.selected ? 'red' : 'white'}}>
+                                    <input type='checkbox' /><input type='text' defaultValue={obj.valueObject?.value} onChange={(eventObj) => {
+                                        if(obj.valueObject) obj.valueObject.value = eventObj.currentTarget.value
+                                        }} />
+                                </div>
+                            )
                         })
                     }
                 </div>
