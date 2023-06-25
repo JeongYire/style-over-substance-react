@@ -22,6 +22,10 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
         }
     );
 
+    const [choicePlural,SetChoicePlural] = useState<boolean>(false);
+    const choiceMin = useRef<number>();
+    const choiceMax = useRef<number>();
+
     const selectChoice = (value : ChoiceObject ) => {
         value.selected = !value.selected;
 
@@ -93,7 +97,29 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
                 params.mode == BoxMode.edit ?
                 <div>
                     <span>복수선택 여부</span>
-                    <input type='checkbox' ref={requiredInput} defaultChecked={required.current}/>
+                    <input type='checkbox' defaultChecked={choicePlural} onChange={(e) => SetChoicePlural(e.currentTarget.checked)}/>
+                </div>
+                : null
+            }
+            {
+                choicePlural ?
+                <div>
+                    {
+                        (() => {
+
+                            const array = Array(9);
+                            array.fill(0,0,9);
+                            console.log(array);
+
+                            return (
+                                array.map((obj,index) => {
+                                    return (
+                                        <input key={`input_${index}`}/>
+                                    )
+                                })
+                            )
+                        })()
+                    }
                 </div>
                 : null
             }
