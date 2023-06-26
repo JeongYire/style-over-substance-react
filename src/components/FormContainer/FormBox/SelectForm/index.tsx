@@ -1,4 +1,4 @@
-import React, { LegacyRef, MutableRefObject, forwardRef, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, LegacyRef, MutableRefObject, forwardRef, useEffect, useRef, useState } from 'react';
 import { ChoiceObjectContainer, BoxMode, ChoiceObject, ChoiceValueObject } from '../../../../types';
 
 
@@ -23,8 +23,29 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
     );
 
     const [choicePlural,SetChoicePlural] = useState<boolean>(false);
-    const choiceMin = useRef<number>();
-    const choiceMax = useRef<number>();
+    const choiceMin = useRef<number>(0);
+    const choiceMax = useRef<number>(0);
+
+    const updateChoiceLimit = (state : 'min' | 'max',value : number,e : ChangeEvent<HTMLSelectElement>) => {
+        switch (state) {
+            case 'max':
+                if(choiceMin.current > value){
+                    alert('최대값은 최소값보다 작아질 수 없습니다!'); 
+                    e.currentTarget.value = choiceMax.current == 0 ? '2' : choiceMax.current.toString();
+                    return;
+                }
+                choiceMax.current = value;
+                break;
+            case 'min':
+                if(choiceMax.current < value){
+                    alert('최소값은 최대값보다 커질 수 없습니다!'); 
+                    e.currentTarget.value = choiceMin.current == 0 ? '2' : choiceMin.current.toString();
+                    return;
+                }
+                choiceMin.current = value;
+                break;
+        }
+    }
 
     const selectChoice = (value : ChoiceObject ) => {
         value.selected = !value.selected;
@@ -104,23 +125,29 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
             {
                 choicePlural ?
                 <div>
-                    {
-                        (() => {
-
-                            const array = Array(9);
-                            array.fill(0,0,9);
-                            console.log(array);
-
-                            return (
-                                array.map((obj,index) => {
-                                    return (
-                                        <input key={`input_${index}`}/>
-                                    )
-                                })
-                            )
-                        })()
-                    }
-                </div>
+                        <span>최소</span>
+                        <select onChange={(e) => updateChoiceLimit('min',Number(e.currentTarget.value),e)}>
+                        {
+                            choiceObjectContainer.instance.map((_,index) => {
+                                if(!index) return;
+                                return (
+                                    <option key={`choice_min_${index}`} value={index+1}>{index+1}개</option>
+                                )
+                            })
+                        }
+                        </select>
+                        <span>최대</span>
+                        <select onChange={(e) => updateChoiceLimit('max',Number(e.currentTarget.value),e)}>
+                        {
+                            choiceObjectContainer.instance.map((_,index) => {
+                                if(!index) return;
+                                return (
+                                    <option key={`choice_max_${index}`} value={index+1}>{index+1}개</option>
+                                )
+                            })
+                        }
+                        </select>
+                </div>  
                 : null
             }
             {
@@ -144,7 +171,6 @@ export default (params : { mode : BoxMode ,index : number, completeEdit : Mutabl
                     </div>
                     {
                         choiceObjectContainer.instance.map((obj) => {
-                            console.log(obj.id);
                             return (
                                 <div key={`choice_${obj.id}`} onClick={() => selectChoice(obj)} style={{backgroundColor:obj.selected ? 'red' : 'white'}}>
                                     <input type='checkbox' /><input type='text' defaultValue={obj.valueObject?.value} onChange={(eventObj) => {
